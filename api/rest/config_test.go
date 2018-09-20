@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"testing"
 	"time"
@@ -103,6 +104,7 @@ func TestLoadJSON(t *testing.T) {
 }
 
 func TestLibp2pConfig(t *testing.T) {
+	ctx := context.Background()
 	cfg := &Config{}
 	err := cfg.Default()
 	if err != nil {
@@ -138,7 +140,7 @@ func TestLibp2pConfig(t *testing.T) {
 	}
 
 	// Test creating a new API with a libp2p config
-	rest, err := NewAPI(cfg)
+	rest, err := NewAPI(ctx, cfg)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -262,7 +262,7 @@ func TestPinTracker_Track(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := tt.args.tracker.Track(tt.args.c); (err != nil) != tt.wantErr {
+			if err := tt.args.tracker.Track(context.Background(), tt.args.c); (err != nil) != tt.wantErr {
 				t.Errorf("PinTracker.Track() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -297,7 +297,7 @@ func BenchmarkPinTracker_Track(b *testing.B) {
 		b.Run(tt.name, func(b *testing.B) {
 			b.ResetTimer()
 			for i := 0; i < b.N; i++ {
-				if err := tt.args.tracker.Track(tt.args.c); err != nil {
+				if err := tt.args.tracker.Track(context.Background(), tt.args.c); err != nil {
 					b.Errorf("PinTracker.Track() error = %v", err)
 				}
 			}
@@ -334,7 +334,7 @@ func TestPinTracker_Untrack(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := tt.args.tracker.Untrack(tt.args.c); (err != nil) != tt.wantErr {
+			if err := tt.args.tracker.Untrack(context.Background(), tt.args.c); (err != nil) != tt.wantErr {
 				t.Errorf("PinTracker.Untrack() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -414,11 +414,11 @@ func TestPinTracker_StatusAll(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := tt.args.tracker.Track(tt.args.c); err != nil {
+			if err := tt.args.tracker.Track(context.Background(), tt.args.c); err != nil {
 				t.Errorf("PinTracker.Track() error = %v", err)
 			}
 			time.Sleep(1 * time.Second)
-			got := tt.args.tracker.StatusAll()
+			got := tt.args.tracker.StatusAll(context.Background())
 			if len(got) != len(tt.want) {
 				for _, pi := range got {
 					t.Logf("pinfo: %v", pi)
@@ -467,7 +467,7 @@ func BenchmarkPinTracker_StatusAll(b *testing.B) {
 		b.Run(tt.name, func(b *testing.B) {
 			b.ResetTimer()
 			for i := 0; i < b.N; i++ {
-				tt.args.tracker.StatusAll()
+				tt.args.tracker.StatusAll(context.Background())
 			}
 		})
 	}
@@ -558,13 +558,13 @@ func TestPinTracker_Status(t *testing.T) {
 				// the Track preps the internal map of the MapPinTracker
 				// not required by the Stateless impl
 				pin := api.PinWithOpts(test.MustDecodeCid(test.TestCid1), pinOpts)
-				if err := tt.args.tracker.Track(pin); err != nil {
+				if err := tt.args.tracker.Track(context.Background(), pin); err != nil {
 					t.Errorf("PinTracker.Track() error = %v", err)
 				}
 				time.Sleep(1 * time.Second)
 			}
 
-			got := tt.args.tracker.Status(tt.args.c)
+			got := tt.args.tracker.Status(context.Background(), tt.args.c)
 
 			if got.Cid.String() != tt.want.Cid.String() {
 				t.Errorf("PinTracker.Status() = %v, want %v", got.Cid, tt.want.Cid)
@@ -675,7 +675,7 @@ func TestPinTracker_SyncAll(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := tt.args.tracker.SyncAll()
+			got, err := tt.args.tracker.SyncAll(context.Background())
 			if (err != nil) != tt.wantErr {
 				t.Errorf("PinTracker.SyncAll() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -686,7 +686,7 @@ func TestPinTracker_SyncAll(t *testing.T) {
 			}
 
 			for _, c := range tt.args.cs {
-				err := tt.args.tracker.Track(api.PinWithOpts(c, pinOpts))
+				err := tt.args.tracker.Track(context.Background(), api.PinWithOpts(c, pinOpts))
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -774,13 +774,13 @@ func TestPinTracker_Sync(t *testing.T) {
 			case *maptracker.MapPinTracker:
 				// the Track preps the internal map of the MapPinTracker; not required by the Stateless impl
 				pin := api.PinWithOpts(test.MustDecodeCid(test.TestCid1), pinOpts)
-				if err := tt.args.tracker.Track(pin); err != nil {
+				if err := tt.args.tracker.Track(context.Background(), pin); err != nil {
 					t.Errorf("PinTracker.Track() error = %v", err)
 				}
 				time.Sleep(1 * time.Second)
 			}
 
-			got, err := tt.args.tracker.Sync(tt.args.c)
+			got, err := tt.args.tracker.Sync(context.Background(), tt.args.c)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("PinTracker.Sync() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -851,13 +851,13 @@ func TestPinTracker_RecoverAll(t *testing.T) {
 			switch tt.args.tracker.(type) {
 			case *maptracker.MapPinTracker:
 				// the Track preps the internal map of the MapPinTracker; not required by the Stateless impl
-				if err := tt.args.tracker.Track(tt.args.pin); err != nil {
+				if err := tt.args.tracker.Track(context.Background(), tt.args.pin); err != nil {
 					t.Errorf("PinTracker.Track() error = %v", err)
 				}
 				time.Sleep(1 * time.Second)
 			}
 
-			got, err := tt.args.tracker.RecoverAll()
+			got, err := tt.args.tracker.RecoverAll(context.Background())
 			if (err != nil) != tt.wantErr {
 				t.Errorf("PinTracker.RecoverAll() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -925,7 +925,7 @@ func TestPinTracker_Recover(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := tt.args.tracker.Recover(tt.args.c)
+			got, err := tt.args.tracker.Recover(context.Background(), tt.args.c)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("PinTracker.Recover() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -976,14 +976,14 @@ func TestUntrackTrack(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := tt.args.tracker.Track(api.PinWithOpts(tt.args.c, pinOpts))
+			err := tt.args.tracker.Track(context.Background(), api.PinWithOpts(tt.args.c, pinOpts))
 			if err != nil {
 				t.Fatal(err)
 			}
 
 			time.Sleep(time.Second / 2)
 
-			err = tt.args.tracker.Untrack(tt.args.c)
+			err = tt.args.tracker.Untrack(context.Background(), tt.args.c)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -1030,21 +1030,21 @@ func TestTrackUntrackWithCancel(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			p := api.PinWithOpts(tt.args.c, pinOpts)
-			err := tt.args.tracker.Track(p)
+			err := tt.args.tracker.Track(context.Background(), p)
 			if err != nil {
 				t.Fatal(err)
 			}
 
 			time.Sleep(100 * time.Millisecond) // let pinning start
 
-			pInfo := tt.args.tracker.Status(tt.args.c)
+			pInfo := tt.args.tracker.Status(context.Background(), tt.args.c)
 			if pInfo.Status == api.TrackerStatusUnpinned {
 				t.Fatal("slowPin should be tracked")
 			}
 
 			if pInfo.Status == api.TrackerStatusPinning {
 				go func() {
-					err = tt.args.tracker.Untrack(tt.args.c)
+					err = tt.args.tracker.Untrack(context.Background(), tt.args.c)
 					if err != nil {
 						t.Fatal(err)
 					}
@@ -1052,9 +1052,9 @@ func TestTrackUntrackWithCancel(t *testing.T) {
 				var ctx context.Context
 				switch trkr := tt.args.tracker.(type) {
 				case *maptracker.MapPinTracker:
-					ctx = trkr.OpContext(tt.args.c)
+					ctx = trkr.OpContext(context.Background(), tt.args.c)
 				case *stateless.Tracker:
-					ctx = trkr.OpContext(tt.args.c)
+					ctx = trkr.OpContext(context.Background(), tt.args.c)
 				}
 				select {
 				case <-ctx.Done():
