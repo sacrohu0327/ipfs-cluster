@@ -7,13 +7,13 @@ import (
 	"errors"
 	"sync"
 
+	"github.com/gxed/opencensus-go/stats"
+	"github.com/gxed/opencensus-go/tag"
+	"github.com/gxed/opencensus-go/trace"
 	"github.com/ipfs/ipfs-cluster/api"
 	"github.com/ipfs/ipfs-cluster/metrics"
 	"github.com/ipfs/ipfs-cluster/pintracker/optracker"
 	"github.com/ipfs/ipfs-cluster/pintracker/util"
-	"go.opencensus.io/stats"
-	"go.opencensus.io/tag"
-	"go.opencensus.io/trace"
 
 	rpc "github.com/hsanjuan/go-libp2p-gorpc"
 	cid "github.com/ipfs/go-cid"

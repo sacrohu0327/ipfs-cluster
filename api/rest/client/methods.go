@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gxed/opencensus-go/trace"
 	"github.com/ipfs/ipfs-cluster/api"
-	"go.opencensus.io/trace"
 
 	cid "github.com/ipfs/go-cid"
 	"github.com/ipfs/go-ipfs-cmdkit/files"
