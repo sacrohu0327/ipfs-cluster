@@ -149,7 +149,7 @@ func checkErr(doing string, err error, args ...interface{}) {
 
 func main() {
 	setupTracing(newTracingConfig())
-	setupMetrics()
+	setupMetrics(newMetricsConfig())
 
 	app := cli.NewApp()
 	app.Name = programName
