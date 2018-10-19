@@ -117,9 +117,9 @@
     },
     {
       "author": "why",
-      "hash": "QmZMVjyWaNCo3Ec44Ce2BcboNuGiQZiJdwW2D3pzwsJdRd",
+      "hash": "QmV6TQYLz7snS8i9BhVKHTrPt7zh2PTMmB6HoJjh6i2RVC",
       "name": "go-unixfs",
-      "version": "1.1.10"
+      "version": "1.1.11"
     },
     {
       "author": "why",
@@ -139,9 +139,9 @@
     },
     {
       "author": "hsanjuan",
-      "hash": "QmP2sH3hdhseUsoNBhAZSCkeUvTGgYXxvZjSB2s7yg4aoD",
+      "hash": "QmTSH37h9gHe1ERNuVcw7BeGTVFp6KruvqSYmsv3W1RoTf",
       "name": "go-mfs",
-      "version": "0.1.10"
+      "version": "0.1.11"
     },
     {
       "author": "blang",
