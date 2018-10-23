@@ -33,7 +33,7 @@ func (mf *metricFactory) newMetric(n string, p peer.ID) api.Metric {
 	defer mf.l.Unlock()
 	m := api.Metric{
 		Name:  n,
-		Peer:  p,
+		Peer:  peer.IDB58Encode(p),
 		Value: fmt.Sprintf("%d", mf.counter),
 		Valid: true,
 	}
@@ -91,7 +91,7 @@ func TestLogMetricConcurrent(t *testing.T) {
 		for i := 0; i < 25; i++ {
 			mt := api.Metric{
 				Name:  "test",
-				Peer:  test.TestPeerID1,
+				Peer:  test.TestPeerID1.Pretty(),
 				Value: fmt.Sprintf("%d", time.Now().UnixNano()),
 				Valid: true,
 			}
@@ -164,7 +164,11 @@ func TestPeerMonitorLogMetric(t *testing.T) {
 	}
 
 	for _, v := range latestMetrics {
-		switch v.Peer {
+		pid, err := peer.IDB58Decode(v.Peer)
+		if err != nil {
+			t.Fatal(err)
+		}
+		switch pid {
 		case test.TestPeerID1:
 			if v.Value != "0" {
 				t.Error("bad metric value")
@@ -233,7 +237,7 @@ func TestPeerMonitorAlerts(t *testing.T) {
 			if alrt.MetricName != "test" {
 				t.Error("Alert should be for test")
 			}
-			if alrt.Peer != test.TestPeerID1 {
+			if alrt.Peer != peer.IDB58Encode(test.TestPeerID1) {
 				t.Error("Peer should be TestPeerID1")
 			}
 		}

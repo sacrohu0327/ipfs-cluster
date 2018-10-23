@@ -17,7 +17,7 @@ func TestChecker(t *testing.T) {
 
 	metr := api.Metric{
 		Name:  "test",
-		Peer:  test.TestPeerID1,
+		Peer:  peer.IDB58Encode(test.TestPeerID1),
 		Value: "1",
 		Valid: true,
 	}
@@ -61,7 +61,7 @@ func TestCheckerWatch(t *testing.T) {
 
 	metr := api.Metric{
 		Name:  "test",
-		Peer:  test.TestPeerID1,
+		Peer:  peer.IDB58Encode(test.TestPeerID1),
 		Value: "1",
 		Valid: true,
 	}

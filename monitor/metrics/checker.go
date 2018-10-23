@@ -48,7 +48,7 @@ func (mc *Checker) CheckPeers(peers []peer.ID) error {
 	return nil
 }
 
-func (mc *Checker) alert(pid peer.ID, metricName string) error {
+func (mc *Checker) alert(pid string, metricName string) error {
 	alrt := api.Alert{
 		Peer:       pid,
 		MetricName: metricName,

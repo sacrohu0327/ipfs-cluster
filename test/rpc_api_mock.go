@@ -335,7 +335,7 @@ func (mock *mockService) PeerMonitorLogMetric(ctx context.Context, in api.Metric
 func (mock *mockService) PeerMonitorLatestMetrics(ctx context.Context, in string, out *[]api.Metric) error {
 	m := api.Metric{
 		Name:  "test",
-		Peer:  TestPeerID1,
+		Peer:  peer.IDB58Encode(TestPeerID1),
 		Value: "0",
 		Valid: true,
 	}

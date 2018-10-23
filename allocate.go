@@ -66,16 +66,21 @@ func (c *Cluster) allocate(hash cid.Cid, rplMin, rplMax int, blacklist []peer.ID
 	// All metrics in metrics are valid (at least the
 	// moment they were compiled by the monitor)
 	for _, m := range metrics {
+		peer, err := peer.IDB58Decode(m.Peer)
+		if err != nil {
+			logger.Error("bad peer id")
+			continue
+		}
 		switch {
-		case containsPeer(blacklist, m.Peer):
+		case containsPeer(blacklist, peer):
 			// discard blacklisted peers
 			continue
-		case containsPeer(currentAllocs, m.Peer):
-			currentMetrics[m.Peer] = m
-		case containsPeer(prioritylist, m.Peer):
-			priorityMetrics[m.Peer] = m
+		case containsPeer(currentAllocs, peer):
+			currentMetrics[peer] = m
+		case containsPeer(prioritylist, peer):
+			priorityMetrics[peer] = m
 		default:
-			candidatesMetrics[m.Peer] = m
+			candidatesMetrics[peer] = m
 		}
 	}
 

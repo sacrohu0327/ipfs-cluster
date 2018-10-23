@@ -9,7 +9,7 @@ import (
 )
 
 // PeerMetrics maps a peer IDs to a metrics window.
-type PeerMetrics map[peer.ID]*Window
+type PeerMetrics map[string]*Window
 
 // Store can be used to store and access metrics.
 type Store struct {
@@ -71,14 +71,14 @@ func (mtrs *Store) Latest(name string) []api.Metric {
 
 // PeerMetrics returns the latest metrics for a given peer ID for
 // all known metrics types. It may return expired metrics.
-func (mtrs *Store) PeerMetrics(peer peer.ID) []api.Metric {
+func (mtrs *Store) PeerMetrics(pid peer.ID) []api.Metric {
 	mtrs.mux.RLock()
 	defer mtrs.mux.RUnlock()
 
 	result := make([]api.Metric, 0)
 
 	for _, byPeer := range mtrs.byName {
-		window, ok := byPeer[peer]
+		window, ok := byPeer[peer.IDB58Encode(pid)]
 		if !ok {
 			continue
 		}

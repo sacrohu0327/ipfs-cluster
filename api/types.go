@@ -846,11 +846,11 @@ func (n *NodeWithMeta) Size() uint64 {
 // pin allocations by a PinAllocator. IPFS cluster is agnostic to
 // the Value, which should be interpreted by the PinAllocator.
 type Metric struct {
-	Name   string
-	Peer   peer.ID // filled-in by Cluster.
-	Value  string
-	Expire int64 // UnixNano
-	Valid  bool  // if the metric is not valid it will be discarded
+	Name   string `json:"name"`
+	Peer   string `json:"peer"` // filled-in by Cluster.
+	Value  string `json:"value"`
+	Expire int64  `json:"expire"` // UnixNano
+	Valid  bool   `json:"valid"`  // if the metric is not valid it will be discarded
 }
 
 // SetTTL sets Metric to expire after the given time.Duration
@@ -878,7 +878,7 @@ func (m *Metric) Discard() bool {
 
 // Alert carries alerting information about a peer. WIP.
 type Alert struct {
-	Peer       peer.ID
+	Peer       string
 	MetricName string
 }
 

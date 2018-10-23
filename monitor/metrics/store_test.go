@@ -6,6 +6,8 @@ import (
 
 	"github.com/ipfs/ipfs-cluster/api"
 	"github.com/ipfs/ipfs-cluster/test"
+
+	peer "github.com/libp2p/go-libp2p-peer"
 )
 
 func TestStoreLatest(t *testing.T) {
@@ -13,7 +15,7 @@ func TestStoreLatest(t *testing.T) {
 
 	metr := api.Metric{
 		Name:  "test",
-		Peer:  test.TestPeerID1,
+		Peer:  peer.IDB58Encode(test.TestPeerID1),
 		Value: "1",
 		Valid: true,
 	}

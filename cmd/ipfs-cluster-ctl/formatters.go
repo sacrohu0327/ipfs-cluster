@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/ipfs/ipfs-cluster/api"
 )
@@ -216,7 +217,8 @@ func textFormatPrintAddedOutput(obj *api.AddedOutput) {
 }
 
 func textFormatPrintMetric(obj *api.Metric) {
-	fmt.Printf("%s: %s | Expire : %d\n", obj.Peer.Pretty(), obj.Value, obj.Expire)
+	date := time.Unix(0, obj.Expire).UTC().Format(time.RFC3339)
+	fmt.Printf("%s: %s | Expire: %s\n", obj.Peer, obj.Value, date)
 }
 
 func textFormatPrintError(obj *api.Error) {
